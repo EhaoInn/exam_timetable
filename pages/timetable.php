@@ -163,10 +163,10 @@ $color_map = [
                                 </td>
                                 <td class="pe-4 text-end">
                                 <?php if ($isOwner): ?>
-                                    <a href="./?page=edit_exam&id=<?= $exam->id ?>" class="btn btn-light btn-sm text-warning border-0 shadow-sm" title="Edit Exam">
+                                    <a href="./?page=exams/edit_exam&id=<?= $exam->id ?>" class="btn btn-light btn-sm text-warning border-0 shadow-sm" title="Edit Exam">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="./?page=delete_exam&id=<?= $exam->id ?>" class="btn btn-light btn-sm text-danger border-0 shadow-sm ms-1 delete_button" title="Delete Exam">
+                                    <a href="./?page=exams/delete_exam&id=<?= $exam->id ?>" class="btn btn-light btn-sm text-danger border-0 shadow-sm ms-1 delete_button" title="Delete Exam">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                     <?php else: ?>
@@ -182,7 +182,7 @@ $color_map = [
                                     <i class="fas fa-calendar-times fa-3x text-muted opacity-25 mb-3"></i>
                                     <p class="text-muted fs-6 mb-0">No exams scheduled for this timetable yet.</p>
                                     <?php if ($isOwner): ?>
-                                    <a href="./?page=add_exam&id=<?= $schedule_id ?>" class="btn btn-primary btn-sm mt-3 px-4">Add your first exam</a>
+                                    <a href="./?page=exams/add_exam&id=<?= $schedule_id ?>" class="btn btn-primary btn-sm mt-3 px-4">Add your first exam</a>
                                     <?php endif; ?>
                                 </td>
                             </tr>

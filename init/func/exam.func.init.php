@@ -1,11 +1,9 @@
 <?php
 
-use Permission;
-
 function createExam($subject_id, $exam_date, $start_time, $end_time, $venue, $notes) {
     global $db;
     
-    // Security check: Only schedule owner or admin can add exams
+    // Only schedule owner or admin can add exams
     if (!Permission::checkExamPermission($subject_id)) return false;
     
     $query = $db->prepare("INSERT INTO exams (subject_id, exam_date, start_time, end_time, venue, notes) VALUES (?, ?, ?, ?, ?, ?)");
@@ -26,14 +24,13 @@ function getExamById($id) {
 function updateExam($id, $subject_id, $exam_date, $start_time, $end_time, $venue, $notes) {
     global $db;
 
-    // Security check: Only schedule owner or admin can update exams
+    // Only schedule owner or admin can update exams
     if (!Permission::checkExamPermission($subject_id)) return false;
 
     $query = $db->prepare("UPDATE exams SET subject_id = ?, exam_date = ?, start_time = ?, end_time = ?, venue = ?, notes = ? WHERE id = ?");
     $query->bind_param("isssssi", $subject_id, $exam_date, $start_time, $end_time, $venue, $notes, $id);
     $query->execute();
 
-    // Check if affected_rows >= 0 because an update with identical values returns 0
     return $db->affected_rows >= 0;
 }
 
@@ -41,7 +38,7 @@ function deleteExam($id) {
     global $db;
 
     $exam = getExamById($id);
-    // Security check: Only schedule owner or admin can delete exams
+    // Only schedule owner or admin can delete exams
     if (!$exam || !Permission::checkExamPermission($exam['subject_id'])) return false;
 
     $query = $db->prepare("DELETE FROM exams WHERE id = ?");

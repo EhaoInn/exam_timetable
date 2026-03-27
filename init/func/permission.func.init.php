@@ -16,7 +16,7 @@ class Permission
         // getScheduleById is assumed to return an object with an 'owner_id' property
         $schedule = getScheduleById($subject['schedule_id']);
 
-        // Check if user is owner or admin (isAdmin() and loggedInUser() are global helpers)
+        // Check if user is owner or admin 
         return $schedule && ($schedule->owner_id == loggedInUser()->id || isAdmin());
     }
 }

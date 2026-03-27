@@ -13,7 +13,7 @@ $error_msg = '';
             <h1 class="fs-4 fw-semibold text-success mb-0">My Schedules</h1>
             <p class="text-muted small mb-0">Manage your exam timetables</p>
         </div>
-        <a href="./?page=add_schedule" role="button" class="btn btn-success px-3">
+        <a href="./?page=schedules/add_schedule" role="button" class="btn btn-success px-3">
             <i class="fa-solid fa-plus me-2"></i>New schedule
         </a>
     </div>
@@ -68,13 +68,13 @@ $error_msg = '';
                                 <i class="fa-solid fa-table me-1"></i>View timetable
                             </a>
                             <?php if ($schedule->owner_id == $user->id): ?>
-                                <a href="./?page=edit_schedule&id=<?= $schedule->id ?>" class="btn btn-outline-secondary btn-sm px-3 rounded-pill">
+                                <a href="./?page=schedules/edit_schedule&id=<?= $schedule->id ?>" class="btn btn-outline-secondary btn-sm px-3 rounded-pill">
                                     <i class="fa-solid fa-pen-to-square me-1"></i>Edit
                                 </a>
-                                <a href="./?page=add_subject&id=<?= $schedule->id ?>" class="btn btn-outline-success btn-sm px-3 rounded-pill">
+                                <a href="./?page=subjects/add_subject&id=<?= $schedule->id ?>" class="btn btn-outline-success btn-sm px-3 rounded-pill">
                                     <i class="fa-solid fa-plus me-1"></i>Subject
                                 </a>
-                                <a href="./?page=add_exam&id=<?= $schedule->id ?>" class="btn btn-outline-info btn-sm px-3 rounded-pill">
+                                <a href="./?page=exams/add_exam&id=<?= $schedule->id ?>" class="btn btn-outline-info btn-sm px-3 rounded-pill">
                                     <i class="fa-solid fa-plus me-1"></i>Exam
                                 </a>
                             <?php endif; ?>
@@ -94,7 +94,7 @@ $error_msg = '';
                 </div>
                 <h5 class="text-secondary fw-semibold">No schedules found</h5>
                 <p class="text-muted small mb-4 mx-auto" style="max-width: 300px;">You haven't created or been added to any schedules yet. Create one to get started.</p>
-                <a href="./?page=add_schedule" class="btn btn-success px-4 rounded-pill shadow-sm">Create your first schedule</a>
+                <a href="./?page=schedules/add_schedule" class="btn btn-success px-4 rounded-pill shadow-sm">Create your first schedule</a>
             </div>
         <?php endif; ?>
     </div>

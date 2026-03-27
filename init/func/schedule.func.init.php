@@ -43,9 +43,9 @@ function updateSchedule($id, $title, $member_ids = [])
     $query->execute();
 
     if ($db->affected_rows >= 0) {
+
         // Sync members
-       // delete and reinsert
-       
+        // delete and reinsert
         $delete_query = $db->prepare("DELETE FROM schedule_members WHERE schedule_id = ?");
         $delete_query->bind_param('i', $id);
         $delete_query->execute();
@@ -93,7 +93,6 @@ function getScheduleMembers($schedule_id)
     $query->execute();
     return $query->get_result();
 }
-
 
 function getScheduleDetails($schedule_id, $search = '', $status = '')
 {

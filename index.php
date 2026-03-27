@@ -11,7 +11,7 @@ $isAdmin = isAdmin();
 // echo $isAdmin;
 include('includes/navbar.inc.php');
 
-$logged_in_pages = ['dashboard', 'add_schedule', 'edit_schedule', 'add_subject', 'add_exam', 'delete_exam', 'edit_exam', 'timetable'];
+$logged_in_pages = ['dashboard', 'schedules/add_schedule', 'schedules/edit_schedule', 'subjects/add_subject', 'exams/add_exam', 'exams/delete_exam', 'exams/edit_exam', 'timetable'];
 $none_logged_in_pages = ['login', 'register'];
 $admin_pages = ['admin/panel', 'admin/users', 'admin/create_user', 'admin/edit_user'];
 // ... spread operator
