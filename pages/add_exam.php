@@ -21,6 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_exam'])) {
         $date_err = "Exam date cannot be in the past.";
     }
 
+    // echo $start_time . $end_time;
+
+    // die();
+
     if (!empty($start_time) && !empty($end_time)) {
         if (strtotime($start_time) >= strtotime($end_time)) {
             $time_err = "End time must be after start time.";

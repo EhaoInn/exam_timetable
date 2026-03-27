@@ -1,6 +1,11 @@
 <?php
 $current_page = $_GET['page'] ?? '';
+
+$user = loggedInUser();
 ?>
+
+<?php if (!empty($user)): ?>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
   <div class="container">
     <a class="navbar-brand fw-semibold" href="./?page=dashboard">
@@ -29,18 +34,30 @@ $current_page = $_GET['page'] ?? '';
       </ul>
       <ul class="navbar-nav ms-auto align-items-center gap-2">
         <li class="nav-item">
-          <span class="text-white-50 small"><?= htmlspecialchars("Ehao Inn") ?></span>
+          <span class="text-white-50 small"><?= htmlspecialchars(loggedInUser()->name ?? '') ?></span>
         </li>
+        
         <li class="nav-item">
           <span class="badge <?= isAdmin() ? 'bg-success' : 'bg-danger' ?>">
-            <?= loggedInUser()->role ?? '' ?>
+            <?= htmlspecialchars(loggedInUser()->role ?? '') ?>
           </span>
         </li>
         <li class="nav-item">
-          <a class="btn btn-sm btn-outline-light"
+          <a class="btn btn-sm btn-outline-light logout_button"
              href="./?page=logout">Logout</a>
         </li>
+
+        
       </ul>
     </div>
   </div>
 </nav>
+<?php endif ?>
+<script type="module">
+    import { confirmAction } from './assets/js/utils.js';
+    
+    confirmAction('.logout_button', {
+        title: "Are you sure to logout?",
+        icon: "question"
+    });
+</script>

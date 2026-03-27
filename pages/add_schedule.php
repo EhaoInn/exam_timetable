@@ -1,6 +1,6 @@
 <?php
 $user = loggedInUser();
-$all_users = getAllUsers();
+$members = getAllUsers(false);
 $success_msg = '';
 $error_msg = '';
 
@@ -60,10 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_schedule'])) {
         <div class="mb-4">
           <label class="form-label fw-medium d-flex justify-content-between">
             <span>Add members <small class="text-muted fw-normal">(Who can view this)</small></span>
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle"><?= count($all_users) ?> available</span>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle"><?= count($members) ?> available</span>
           </label>
           <div class="border rounded-3 p-3 d-flex flex-column gap-2 bg-light bg-opacity-50" style="max-height: 200px; overflow-y: auto;">
-            <?php foreach ($all_users as $member): ?>
+            <?php foreach ($members as $member): ?>
             <div class="form-check mb-0">
               <input type="checkbox" name="members[]" class="form-check-input" value="<?= $member->id ?>" id="member<?= $member->id ?>">
               <label class="form-check-label d-flex flex-column" for="member<?= $member->id ?>">
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_schedule'])) {
             </div>
             <?php endforeach; ?>
 
-            <?php if (empty($all_users)): ?>
+            <?php if (empty($members)): ?>
               <div class="text-center py-2">
                 <p class="text-muted small mb-0">No other members discovered.</p>
               </div>

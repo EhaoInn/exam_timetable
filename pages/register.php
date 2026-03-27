@@ -69,9 +69,9 @@ if (isset($_POST['name'], $_POST['email'], $_POST['password'], $_POST['confirmPa
           </div>
           <div class="mb-3">
             <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control <?php echo $passwdErr ? 'is-invalid' : '' ?>">
+            <input type="password" name="password" class="form-control <?php echo $passwordErr ? 'is-invalid' : '' ?>">
             <div class="invalid-feedback">
-              <?php echo $passwdErr ?>
+              <?php echo $passwordErr ?>
             </div>
 
           </div>

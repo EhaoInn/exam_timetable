@@ -16,7 +16,7 @@ if (isset($_POST['email'], $_POST['password'])) {
   }
 
   if (empty($emailErr) && empty($passwordErr)) {
-    $user = logUserIn($email, $password);
+    $user = logIn($email, $password);
 
     if ($user !== false) {
       $_SESSION['user_id'] = $user->id;

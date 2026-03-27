@@ -29,4 +29,18 @@ function getSubjects() {
     return $query->get_result();
 }
 
+function getSubjectById($id) {
+    global $db;
+    $query = $db->prepare("SELECT * FROM subjects WHERE id = ?");
+    $query->bind_param("i", $id);
+    $query->execute();
+    return $query->get_result()->fetch_assoc();
+}
+
+function countTotalSubjects() {
+    global $db;
+    $result = $db->query("SELECT COUNT(*) as total FROM subjects");
+    return $result->fetch_object()->total;
+}
+
 ?>
