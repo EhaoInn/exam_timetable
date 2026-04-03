@@ -121,4 +121,15 @@ function deleteUser($id)
     return $query->execute();
 }
 
+function toggleUserRole($id) {
+    global $db;
+    $user = getUserById($id);
+    if (!$user) return false;
+    
+    $newRole = ($user->role === 'admin') ? 'user' : 'admin';
+    $query = $db->prepare("UPDATE users SET role = ? WHERE id = ?");
+    $query->bind_param('si', $newRole, $id);
+    return $query->execute();
+}
+
 ?>

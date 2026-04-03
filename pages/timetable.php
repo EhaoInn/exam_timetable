@@ -105,7 +105,10 @@ $color_map = [
                 <div class="col">
                     <h5 class="mb-0 fw-semibold text-secondary"><?= htmlspecialchars($schedule_title) ?></h5>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto d-flex gap-2">
+                    <a href="./?page=export_calendar&id=<?= $schedule_id ?>" class="btn btn-outline-primary btn-sm px-3 py-2">
+                        <i class="fas fa-file-export me-2"></i>Export to Calendar
+                    </a>
                     <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2">Full Schedule</span>
                 </div>
             </div>

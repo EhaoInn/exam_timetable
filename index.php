@@ -4,14 +4,36 @@ require_once('init/init.php');
 
 $page = $_GET['page'] ?? 'login';
 
-include('includes/header.inc.php');
 $user = loggedInUser();
 $isAdmin = isAdmin();
 
-// echo $isAdmin;
+if ($page === 'export_calendar') {
+    if (empty($user)) {
+        header('location: ./?page=login');
+        exit;
+    }
+    include('pages/export_calendar.php');
+    exit;
+}
+
+include('includes/header.inc.php');
 include('includes/navbar.inc.php');
 
-$logged_in_pages = ['dashboard', 'schedules/add_schedule', 'schedules/edit_schedule', 'subjects/add_subject', 'exams/add_exam', 'exams/delete_exam', 'exams/edit_exam', 'timetable'];
+$logged_in_pages = [
+    'dashboard',
+    'timetable',
+    'schedules/add_schedule',
+    'schedules/delete_schedule',
+    'schedules/edit_schedule',
+    'subjects/add_subject',
+    'subjects/delete_subject',
+    'subjects/edit_subject',
+    'exams/add_exam',
+    'exams/delete_exam',
+    'exams/edit_exam',
+    'export_calendar'
+];
+
 $none_logged_in_pages = ['login', 'register'];
 $admin_pages = ['admin/panel', 'admin/users', 'admin/create_user', 'admin/edit_user'];
 // ... spread operator
@@ -41,4 +63,3 @@ if (in_array($page, $available_pages)) {
 }
 
 include('includes/footer.inc.php');
-?>

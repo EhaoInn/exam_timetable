@@ -136,9 +136,12 @@ $color_map = [
                             </div>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="text-muted small d-none d-md-inline" style="font-size: 0.75rem;"><?= htmlspecialchars($subject->lecturer) ?></span>
-                                <button class="btn btn-sm btn-outline-danger rounded-circle p-0 d-flex align-items-center justify-content-center border-0" style="width:26px;height:26px;" title="Remove">
+                                <a href="" class="btn btn-sm btn-outline-info rounded-circle p-0 d-flex align-items-center justify-content-center border-0" style="width:26px;height:26px;" title="Remove">
+                                    <i class="fa-solid fa-pen" style="font-size:11px;"></i>
+                                </a>
+                                <a href="" class="btn btn-sm btn-outline-danger rounded-circle p-0 d-flex align-items-center justify-content-center border-0" style="width:26px;height:26px;" title="Remove">
                                     <i class="fa-solid fa-xmark" style="font-size:11px;"></i>
-                                </button>
+                                </a>
                             </div>
                         </div>
                         <?php endwhile; ?>

@@ -19,4 +19,14 @@ class Permission
         // Check if user is owner or admin 
         return $schedule && ($schedule->owner_id == loggedInUser()->id || isAdmin());
     }
+
+    public static function checkSchedulePermission($schedule_id)
+    {
+        if (!$schedule_id) return false;
+
+        $schedule = getScheduleById($schedule_id);
+        if (!$schedule) return false;
+
+        return $schedule && ($schedule->owner_id == loggedInUser()->id || isAdmin());
+    }
 }

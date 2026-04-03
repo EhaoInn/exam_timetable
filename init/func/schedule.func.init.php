@@ -34,6 +34,60 @@ function getScheduleById($id)
     return $query->get_result()->fetch_object();
 }
 
+
+
+
+function deleteSchedule($id)
+{
+    global $db;
+
+    if(!Permission::checkSchedulePermission($id)) return false;
+    
+    $db->begin_transaction();
+
+    try {
+        // 1. Delete all exams belonging to subjects in this schedule
+        $exam_query = $db->prepare("DELETE exams FROM exams
+                                    INNER JOIN subjects ON exams.subject_id = subjects.id
+                                    WHERE subjects.schedule_id = ?");
+        $exam_query->bind_param("i", $id);
+        $exam_query->execute();
+
+        // 2. Delete all subjects belonging to this schedule
+        $subject_query = $db->prepare("DELETE FROM subjects WHERE schedule_id = ?");
+        $subject_query->bind_param("i", $id);
+        $subject_query->execute();
+
+        // 3. Delete all schedule members
+        $member_query = $db->prepare("DELETE FROM schedule_members WHERE schedule_id = ?");
+        $member_query->bind_param("i", $id);
+        $member_query->execute();
+
+        // 4. Finally, delete the schedule itself
+        $schedule_query = $db->prepare("DELETE FROM schedules WHERE id = ?");
+        $schedule_query->bind_param("i", $id);
+        $schedule_query->execute();
+
+        // echo $db->affected_rows >= 0;
+
+        // die();
+
+        if ($db->affected_rows >= 0) {
+            // echo "Hi";
+            $db->commit();
+            return true;
+        } else {
+        // print_r($id);
+            $db->rollback();
+            return false;
+        }
+    } catch (Exception $e) {
+        $db->rollback();
+        // print_r($id);
+        return false;
+    }
+}
+
 function updateSchedule($id, $title, $member_ids = [])
 {
     global $db;
@@ -50,15 +104,15 @@ function updateSchedule($id, $title, $member_ids = [])
         $delete_query->bind_param('i', $id);
         $delete_query->execute();
 
-        if(!empty($member_ids)){
+        if (!empty($member_ids)) {
             $insert_members = $db->prepare("INSERT INTO schedule_members (schedule_id,user_id) VALUES (?,?)");
-    
+
             // loop all members_ids we selected in a checkbox to insert
-            foreach ($member_ids as $user_id){
+            foreach ($member_ids as $user_id) {
                 $insert_members->bind_param('ii', $id, $user_id);
                 $insert_members->execute();
             }
-        //    $insert_members->close();
+            //    $insert_members->close();
         }
 
         return true;
@@ -155,7 +209,8 @@ function getScheduleExamsCount($schedule_id)
     return $result->total;
 }
 
-function getAllSchedules() {
+function getAllSchedules()
+{
     global $db;
     $query = $db->prepare("SELECT schedules.*, users.name as owner_name, (SELECT COUNT(*) FROM exams JOIN subjects ON exams.subject_id = subjects.id WHERE subjects.schedule_id = schedules.id) as exam_count FROM schedules JOIN users ON schedules.owner_id = users.id");
     $query->execute();
@@ -181,7 +236,8 @@ function getMembers()
     }
     return $users;
 }
-function countTotalSchedules() {
+function countTotalSchedules()
+{
     global $db;
     $query = $db->prepare("SELECT COUNT(*) as total FROM schedules");
     $query->execute();
