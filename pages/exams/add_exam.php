@@ -1,6 +1,9 @@
 <?php
 $schedule_id = $_GET['id'] ?? 0;
 $subjects = getSubjectsBySchedule($schedule_id);
+
+// var_dump($subjects);
+
 $success_msg = '';
 $error_msg = '';
 $date_err = '';
@@ -78,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_exam'])) {
                     <select name="subject_id" id="subject_id" class="form-select bg-light border-0 py-2">
                         <option value="" disabled selected>Select a subject...</option>
                         <?php foreach ($subjects as $subject): ?>
-                            <option value="<?= $subject['id'] ?>"><?= htmlspecialchars($subject['code'] . ' — ' . $subject['name']) ?></option>
+                            <option value="<?= $subject->id ?>"><?= htmlspecialchars($subject->code . ' — ' . $subject->name) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

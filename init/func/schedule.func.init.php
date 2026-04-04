@@ -126,6 +126,8 @@ function getSchedules()
     global $db;
 
     $user = loggedInUser();
+    if (!$user) return [];
+    
     $user_id = $user->id;
 
     // Fetch schedules where user is the owner OR a listed member
@@ -136,16 +138,31 @@ function getSchedules()
                             WHERE schedules.owner_id = ? OR schedule_members.user_id = ?");
     $query->bind_param("ii", $user_id, $user_id);
     $query->execute();
-    return $query->get_result();
+    $result = $query->get_result();
+
+    $schedules = [];
+    while ($row = $result->fetch_object()) {
+        $schedules[] = $row;
+    }
+    return $schedules;
 }
 
+/**
+ * @return array
+ */
 function getScheduleMembers($schedule_id)
 {
     global $db;
     $query = $db->prepare("SELECT users.id, users.name, users.email FROM schedule_members JOIN users ON schedule_members.user_id = users.id WHERE schedule_members.schedule_id = ?");
     $query->bind_param("i", $schedule_id);
     $query->execute();
-    return $query->get_result();
+    $result = $query->get_result();
+    
+    $members = [];
+    while ($row = $result->fetch_object()) {
+        $members[] = $row;
+    }
+    return $members;
 }
 
 function getScheduleDetails($schedule_id, $search = '', $status = '')
@@ -196,7 +213,13 @@ function getScheduleDetails($schedule_id, $search = '', $status = '')
     $query = $db->prepare($sql);
     $query->bind_param($types, ...$params);
     $query->execute();
-    return $query->get_result();
+    $result = $query->get_result();
+
+    $exams = [];
+    while ($row = $result->fetch_object()) {
+        $exams[] = $row;
+    }
+    return $exams;
 }
 
 function getScheduleExamsCount($schedule_id)
@@ -214,7 +237,13 @@ function getAllSchedules()
     global $db;
     $query = $db->prepare("SELECT schedules.*, users.name as owner_name, (SELECT COUNT(*) FROM exams JOIN subjects ON exams.subject_id = subjects.id WHERE subjects.schedule_id = schedules.id) as exam_count FROM schedules JOIN users ON schedules.owner_id = users.id");
     $query->execute();
-    return $query->get_result();
+    $result = $query->get_result();
+
+    $schedules = [];
+    while ($row = $result->fetch_object()) {
+        $schedules[] = $row;
+    }
+    return $schedules;
 }
 
 function getMembers()

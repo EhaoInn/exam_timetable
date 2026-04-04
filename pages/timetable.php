@@ -4,19 +4,10 @@ $search = $_GET['search'] ?? '';
 $status = $_GET['status'] ?? '';
 
 
-$exams_result = getScheduleDetails($schedule_id, $search, $status);
-$exams = [];
-$schedule_title = "Schedule Details";
-
+$exams = getScheduleDetails($schedule_id, $search, $status);
 $schedule = getScheduleById($schedule_id);
+$schedule_title = $schedule ? $schedule->title : "Schedule Details";
 $isOwner = $schedule && ($schedule->owner_id == loggedInUser()->id || isAdmin());
-
-if ($exams_result->num_rows > 0) {
-    while ($row = $exams_result->fetch_object()) {
-        $exams[] = $row;
-    }
-    $schedule_title = $exams[0]->schedule_title;
-}
 
 $color_map = [
     'blue' => 'primary',
@@ -106,9 +97,6 @@ $color_map = [
                     <h5 class="mb-0 fw-semibold text-secondary"><?= htmlspecialchars($schedule_title) ?></h5>
                 </div>
                 <div class="col-auto d-flex gap-2">
-                    <a href="./?page=export_calendar&id=<?= $schedule_id ?>" class="btn btn-outline-primary btn-sm px-3 py-2">
-                        <i class="fas fa-file-export me-2"></i>Export to Calendar
-                    </a>
                     <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2">Full Schedule</span>
                 </div>
             </div>

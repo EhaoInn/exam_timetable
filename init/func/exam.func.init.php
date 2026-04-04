@@ -59,17 +59,14 @@ function getUpComingExams()
     $user = loggedInUser();
     if (!$user) return [];
 
-    $user_id = $user->id;
+    $user_id = (int)$user->id;
 
     $query = $db->prepare("
-        SELECT DISTINCT ex.* , su.name subject_name, su.color, sc.id schedule_id
+        SELECT DISTINCT ex.* , su.name AS subject_name, su.color, sc.id AS schedule_id
         FROM exams ex
-        JOIN subjects su
-        ON ex.subject_id = su.id
-        JOIN schedules sc 
-        ON sc.id = su.schedule_id
-        LEFT JOIN schedule_members sm
-        ON sm.user_id = sc.owner_id
+        JOIN subjects su ON ex.subject_id = su.id
+        JOIN schedules sc ON sc.id = su.schedule_id
+        LEFT JOIN schedule_members sm ON sc.id = sm.schedule_id
         WHERE (sc.owner_id = ? OR sm.user_id = ?)
         AND ex.exam_date = DATE_ADD(CURDATE(), INTERVAL 1 DAY)
         ORDER BY ex.start_time ASC
@@ -99,7 +96,13 @@ function getRecentExams($limit = 5) {
     $query = $db->prepare("SELECT e.*, s.name as subject_name, s.color FROM exams e JOIN subjects s ON e.subject_id = s.id ORDER BY e.exam_date DESC, e.start_time DESC LIMIT ?");
     $query->bind_param("i", $limit);
     $query->execute();
-    return $query->get_result();
+    $result = $query->get_result();
+
+    $exams = [];
+    while ($row = $result->fetch_object()) {
+        $exams[] = $row;
+    }
+    return $exams;
 }
 
 function getExamStatusStats() {

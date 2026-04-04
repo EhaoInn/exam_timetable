@@ -1,34 +1,34 @@
 <?php
 
-function getAllUsers($search = '', $excludeSelf = true) {
+function getAllUsers($search = '', $excludeSelf = true, $includeAdmins = true) {
     global $db;
-    $sql = "SELECT id, name, email, role, created_at FROM users WHERE role <> 'admin'";
+    $sql = "SELECT id, name, email, role, created_at FROM users WHERE 1=1";
     $params = [];
     $types = "";
+
+    if (!$includeAdmins) {
+        $sql .= " AND role <> 'admin'";
+    }
 
     if ($search) {
         $sql .= " AND (name LIKE ? OR email LIKE ?)";
         $searchParam = "%$search%";
         $params[] = $searchParam;
         $params[] = $searchParam;
-
-        // var_dump($params);
-
         $types .= "ss";
     }
 
     if($excludeSelf){
-        $sql .= " AND id <> ?";
-        $params[] = loggedInUser()->id;
-        $types .= "i";
+        $user = loggedInUser();
+        if ($user) {
+            $sql .= " AND id <> ?";
+            $params[] = $user->id;
+            $types .= "i";
+        }
     }
 
     $query = $db->prepare($sql);
 
-        // echo $sql;
-        // var_dump($params);
-
-    // die();
     if (!empty($params)) {
         $query->bind_param($types, ...$params);
     }
@@ -126,7 +126,7 @@ function toggleUserRole($id) {
     $user = getUserById($id);
     if (!$user) return false;
     
-    $newRole = ($user->role === 'admin') ? 'user' : 'admin';
+    $newRole = ($user->role === 'admin') ? 'student' : 'admin';
     $query = $db->prepare("UPDATE users SET role = ? WHERE id = ?");
     $query->bind_param('si', $newRole, $id);
     return $query->execute();

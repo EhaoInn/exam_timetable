@@ -1,5 +1,5 @@
 <?php
-$all_users = getAllUsers('', false); // Get all, don't exclude self for counts
+$all_users = getAllUsers('', false);
 $total_schedules = countTotalSchedules();
 $total_subjects = countTotalSubjects();
 $total_exams = countTotalExams();
@@ -113,8 +113,8 @@ $all_schedules = getAllSchedules();
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if ($recent_exams->num_rows > 0): ?>
-                                    <?php while($e = $recent_exams->fetch_object()): 
+                                <?php if (!empty($recent_exams)): ?>
+                                    <?php foreach($recent_exams as $e): 
                                         $isUpcoming = (strtotime($e->exam_date) >= strtotime(date('Y-m-d')));
                                     ?>
                                         <tr>
@@ -135,7 +135,7 @@ $all_schedules = getAllSchedules();
                                                 </span>
                                             </td>
                                         </tr>
-                                    <?php endwhile; ?>
+                                    <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr><td colspan="4" class="text-center py-4 text-muted small">No recent activity recorded.</td></tr>
                                 <?php endif; ?>
@@ -162,16 +162,25 @@ $all_schedules = getAllSchedules();
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if ($all_schedules->num_rows > 0): ?>
-                                    <?php $i=0; while($s = $all_schedules->fetch_object()): 
+                                <?php if (!empty($all_schedules)): ?>
+                                    <?php $i=0; foreach($all_schedules as $s): 
                                         if($i >= 5) break; $i++;
                                     ?>
                                         <tr>
                                             <td class="ps-4 fw-medium"><?= htmlspecialchars($s->title) ?></td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar-xs bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px; font-size: 10px;">
-                                                        <?= strtoupper(substr($s->owner_name, 0, 1)) ?>
+                                                    <?php 
+                                                        $name_parts = explode(' ', trim($s->owner_name));
+                                                        $initials = strtoupper(substr($name_parts[0], 0, 1));
+                                                        if (count($name_parts) > 1) {
+                                                            $initials .= strtoupper(substr(end($name_parts), 0, 1));
+                                                        }
+                                                    ?>
+                                                    <div class="avatar-xs bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                                         style="width: 24px; height: 24px; font-size: 10px;" 
+                                                         data-bs-toggle="tooltip" data-bs-title="<?= htmlspecialchars($s->owner_name) ?>">
+                                                        <?= $initials ?>
                                                     </div>
                                                     <span class="small"><?= htmlspecialchars($s->owner_name) ?></span>
                                                 </div>
@@ -180,7 +189,7 @@ $all_schedules = getAllSchedules();
                                                 <span class="badge bg-info-subtle text-info border border-info-subtle px-2"><?= $s->exam_count ?> Exams</span>
                                             </td>
                                         </tr>
-                                    <?php endwhile; ?>
+                                    <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr><td colspan="3" class="text-center py-4 text-muted small">No schedules found.</td></tr>
                                 <?php endif; ?>
@@ -213,15 +222,12 @@ $all_schedules = getAllSchedules();
                     </div>
                 </div>
             </div>
-
-            <!-- System Notifications / Alerts -->
-            <div class="card border-0 shadow-sm bg-dark text-white rounded-4 overflow-hidden">
-                <div class="card-body p-4">
-                    <h6 class="fw-bold mb-3"><i class="fas fa-shield-alt me-2 text-warning"></i>Security Note</h6>
-                    <p class="small opacity-75 mb-4">You are currently logged in with Administrative privileges. Please ensure all data modifications comply with system policies.</p>
-                    <a href="./?page=logout" class="btn btn-outline-light btn-sm w-100 rounded-pill py-2">System Logout</a>
-                </div>
-            </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Initialize Bootstrap Tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>

@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_schedule'])) {
 
       <div class="mb-4">
         <h5 class="fw-semibold mb-0">New Schedule</h5>
-        <p class="text-muted small mb-0">Fill in the details to create a new schedule</p>
       </div>
 
       <?php if ($success_msg): ?>
@@ -68,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_schedule'])) {
               <input type="checkbox" name="members[]" class="form-check-input" value="<?= $member->id ?>" id="member<?= $member->id ?>">
               <label class="form-check-label d-flex flex-column" for="member<?= $member->id ?>">
                 <span class="fw-medium"><?= htmlspecialchars($member->name) ?></span>
-                <span class="text-muted small" style="font-size: 0.75rem;"><?= htmlspecialchars($member->email) ?></span>
+                <!-- <span class="text-muted small" style="font-size: 0.75rem;"><?= htmlspecialchars($member->email) ?></span> -->
               </label>
             </div>
             <?php endforeach; ?>
@@ -79,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_schedule'])) {
               </div>
             <?php endif; ?>
           </div>
-          <div class="form-text small mt-2">Shared members will be able to see this schedule's results.</div>
         </div>
 
         <hr class="my-4 opacity-50">

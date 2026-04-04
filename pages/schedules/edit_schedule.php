@@ -19,9 +19,9 @@ if ($schedule->owner_id != $user->id) {
 }
 $members = getAllUsers(false);
 // get members of that schedule
-$current_members_res = getScheduleMembers($id);
+$current_members = getScheduleMembers($id);
 $current_member_ids = [];
-while ($m = $current_members_res->fetch_object()) {
+foreach ($current_members as $m) {
     // loop and store all members id in this array
     $current_member_ids[] = (int)$m->id;
 }
@@ -56,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_schedule'])) {
   <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
     <div class="card-header bg-success bg-opacity-10 border-0 p-4">
       <h4 class="fw-bold text-success mb-0">Edit Schedule</h4>
-      <p class="text-muted small mb-0">Update your timetable details and members</p>
     </div>
     <div class="card-body p-4">
 
@@ -106,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_schedule'])) {
                 <?= in_array((int)$member->id, $current_member_ids) ? 'checked' : '' ?>>
               <label class="form-check-label d-flex flex-column" for="member<?= $member->id ?>">
                 <span class="fw-medium font-size-sm"><?= htmlspecialchars($member->name) ?></span>
-                <span class="text-muted small" style="font-size: 0.75rem;"><?= htmlspecialchars($member->email) ?></span>
+                <!-- <span class="text-muted small" style="font-size: 0.75rem;"><?= htmlspecialchars($member->email) ?></span> -->
               </label>
             </div>
             <?php endforeach; ?>
@@ -117,7 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_schedule'])) {
               </div>
             <?php endif; ?>
           </div>
-          <div class="form-text small mt-2">Check the names of users who should have access to this schedule.</div>
         </div>
 
         <hr class="my-4 opacity-50">

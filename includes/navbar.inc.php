@@ -8,7 +8,6 @@ $upcomingCount = count($upcomingExams);
 if (!empty($user)): 
 ?>
 <style>
-    /* Premium Floating Navbar Styles */
     .navbar-floating {
         position: fixed;
         top: 15px;
@@ -232,26 +231,24 @@ if (!empty($user)):
   });
 
   // Dark Mode Toggle Logic
-  const themeToggle = document.getElementById('theme-toggle');
-  const themeIcon = document.getElementById('theme-icon');
+  const $themeToggle = $('#theme-toggle');
+  const $themeIcon = $('#theme-icon');
   
   const updateIcon = (theme) => {
     if (theme === 'dark') {
-      themeIcon.classList.remove('fa-moon');
-      themeIcon.classList.add('fa-sun');
+      $themeIcon.removeClass('fa-moon').addClass('fa-sun');
     } else {
-      themeIcon.classList.remove('fa-sun');
-      themeIcon.classList.add('fa-moon');
+      $themeIcon.removeClass('fa-sun').addClass('fa-moon');
     }
   };
 
-  updateIcon(document.documentElement.getAttribute('data-bs-theme'));
+  updateIcon($('html').attr('data-bs-theme'));
 
-  themeToggle.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+  $themeToggle.on('click', function() {
+    const currentTheme = $('html').attr('data-bs-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
-    document.documentElement.setAttribute('data-bs-theme', newTheme);
+    $('html').attr('data-bs-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     updateIcon(newTheme);
   });

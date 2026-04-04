@@ -43,8 +43,8 @@ unset($_SESSION['alert_success'], $_SESSION['alert_error']);
 
     <!-- Schedules Grid -->
     <div class="row g-4">
-        <?php if ($schedules->num_rows > 0): ?>
-            <?php while ($schedule = $schedules->fetch_object()): 
+        <?php if (!empty($schedules)): ?>
+            <?php foreach ($schedules as $schedule): 
                 $examCount = getScheduleExamsCount($schedule->id);
                 $isOwner = ($schedule->owner_id == $user->id);
             ?>
@@ -71,32 +71,44 @@ unset($_SESSION['alert_success'], $_SESSION['alert_error']);
                             </p>
 
                             <!-- Member Avatar Group -->
-                            <?php $members = getScheduleMembers($schedule->id); ?>
+                            <?php 
+                                /** @var array $members */
+                                $members = getScheduleMembers($schedule->id); 
+                            ?>
                             <div class="mb-4">
                                 <label class="small text-muted d-block mb-2">Team Members</label>
                                 <div class="avatar-group d-flex align-items-center">
                                     <?php 
                                     $m_count = 0;
-                                    while ($member = $members->fetch_object()): 
+                                    $total_m = count((array)$members);
+                                    foreach ($members as $member): 
                                         if($m_count < 4):
                                     ?>
+                                        <?php 
+                                            $name_parts = explode(' ', trim($member->name));
+                                            $initials = strtoupper(substr($name_parts[0], 0, 1));
+                                            if (count($name_parts) > 1) {
+                                                $initials .= strtoupper(substr(end($name_parts), 0, 1));
+                                            }
+                                        ?>
                                         <div class="avatar-sm rounded-circle bg-white shadow-sm border border-2 border-white d-flex align-items-center justify-content-center text-primary fw-bold" 
-                                             style="width: 32px; height: 32px; font-size: 10px; margin-left: <?= $m_count > 0 ? '-10' : '0' ?>px; z-index: <?= 10 - $m_count ?>;"
-                                             title="<?= htmlspecialchars($member->name) ?>">
-                                            <?= strtoupper(substr($member->name, 0, 1)) ?>
+                                             style="width: 32px; height: 32px; font-size: 10px; margin-left: <?= $m_count > 0 ? '-10' : '0' ?>px; z-index: <?= 20 - $m_count ?>;"
+                                             data-bs-toggle="tooltip" data-bs-title="<?= htmlspecialchars($member->name) ?>">
+                                            <?= $initials ?>
                                         </div>
                                     <?php 
                                         endif;
                                         $m_count++;
-                                    endwhile; 
+                                    endforeach; 
                                     ?>
-                                    <?php if($m_count > 4): ?>
+                                    <?php if($total_m > 4): ?>
                                         <div class="avatar-sm rounded-circle bg-light border border-2 border-white d-flex align-items-center justify-content-center text-muted fw-bold" 
-                                             style="width: 32px; height: 32px; font-size: 10px; margin-left: -10px; z-index: 5;">
-                                            +<?= $m_count - 4 ?>
+                                             style="width: 32px; height: 32px; font-size: 10px; margin-left: -10px; z-index: 5;"
+                                             data-bs-toggle="tooltip" data-bs-title="And <?= $total_m - 4 ?> more members">
+                                            +<?= $total_m - 4 ?>
                                         </div>
                                     <?php endif; ?>
-                                    <?php if($m_count == 0): ?>
+                                    <?php if($total_m == 0): ?>
                                         <span class="text-muted small fst-italic">Private schedule</span>
                                     <?php endif; ?>
                                 </div>
@@ -125,7 +137,7 @@ unset($_SESSION['alert_success'], $_SESSION['alert_error']);
                         </div>
                     </div>
                 </div>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
         <?php else: ?>
             <!-- Empty State -->
             <div class="col-12">
@@ -157,6 +169,10 @@ unset($_SESSION['alert_success'], $_SESSION['alert_error']);
         confirmText: "Yes, delete it",
         icon: "warning"
     });
+
+    // Initialize Bootstrap Tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 </script>
 
 <style>

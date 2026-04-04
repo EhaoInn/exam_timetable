@@ -44,7 +44,6 @@ $color_map = [
 
                     <div class="mb-4">
                         <h5 class="fw-semibold mb-0">New Subject</h5>
-                        <p class="text-muted small mb-0">Fill in the details to add a new subject</p>
                     </div>
 
                     <?php if ($success_msg): ?>
@@ -122,12 +121,12 @@ $color_map = [
                             <h5 class="fw-semibold mb-0">Existing subjects</h5>
                             <p class="text-muted small mb-0">Subjects already added to this schedule</p>
                         </div>
-                        <span class="badge bg-body-secondary text-secondary border px-3 py-2 rounded-pill"><?= $existing_subjects->num_rows ?> subjects</span>
+                        <span class="badge bg-body-secondary text-secondary border px-3 py-2 rounded-pill"><?= count((array)$existing_subjects) ?> subjects</span>
                     </div>
 
                     <div class="d-flex flex-column gap-2 overflow-y-auto" style="max-height: 500px;">
 
-                        <?php while ($subject = $existing_subjects->fetch_object()): ?>
+                        <?php foreach ($existing_subjects as $subject): ?>
                         <div class="d-flex align-items-center justify-content-between border rounded-pill px-3 py-2 bg-body-secondary bg-opacity-50">
                             <div class="d-flex align-items-center gap-2 overflow-hidden">
                                 <div class="rounded-circle flex-shrink-0" style="width:14px;height:14px;background-color:<?= $color_map[$subject->color] ?? '#ddd' ?>;"></div>
@@ -136,17 +135,17 @@ $color_map = [
                             </div>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="text-muted small d-none d-md-inline" style="font-size: 0.75rem;"><?= htmlspecialchars($subject->lecturer) ?></span>
-                                <a href="" class="btn btn-sm btn-outline-info rounded-circle p-0 d-flex align-items-center justify-content-center border-0" style="width:26px;height:26px;" title="Remove">
+                                <a href="./?page=subjects/edit_subject&id=<?= $subject->id ?>" class="btn btn-sm btn-outline-info rounded-circle p-0 d-flex align-items-center justify-content-center border-0 shadow-none" style="width:26px;height:26px;" title="Edit">
                                     <i class="fa-solid fa-pen" style="font-size:11px;"></i>
                                 </a>
-                                <a href="" class="btn btn-sm btn-outline-danger rounded-circle p-0 d-flex align-items-center justify-content-center border-0" style="width:26px;height:26px;" title="Remove">
-                                    <i class="fa-solid fa-xmark" style="font-size:11px;"></i>
+                                <a href="./?page=subjects/delete_subject&id=<?= $subject->id ?>&sid=<?= $schedule_id ?>" class="btn btn-sm btn-outline-danger rounded-circle p-0 d-flex align-items-center justify-content-center border-0 shadow-none delete_subject" style="width:26px;height:26px;" title="Remove">
+                                    <i class="fa-solid fa-trash-can" style="font-size:11px;"></i>
                                 </a>
                             </div>
                         </div>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
 
-                        <?php if ($existing_subjects->num_rows === 0): ?>
+                        <?php if (empty($existing_subjects)): ?>
                         <div class="text-center py-5">
                             <i class="fa-solid fa-book fa-3x text-muted opacity-25 mb-3"></i>
                             <p class="text-muted small mb-0">No subjects added to this schedule yet.</p>
@@ -160,3 +159,14 @@ $color_map = [
 
     </div>
 </div>
+
+<script type="module">
+    import { confirmAction } from './assets/js/utils.js';
+
+    confirmAction('.delete_subject', {
+        title: "Remove this subject?",
+        text: "This will also permanently delete all exams associated with this subject.",
+        confirmText: "Yes, remove it",
+        icon: "warning"
+    });
+</script>

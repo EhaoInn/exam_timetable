@@ -81,8 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_exam'])) {
                     </label>
                     <select name="subject_id" id="subject_id" class="form-select bg-light border-0 py-2">
                         <?php foreach ($subjects as $s): ?>
-                            <option value="<?= $s['id'] ?>" <?= $s['id'] == $exam['subject_id'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($s['code'] . ' — ' . $s['name']) ?>
+                            <option value="<?= $s->id ?>" <?= $s->id == $exam['subject_id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($s->code . ' — ' . $s->name) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
